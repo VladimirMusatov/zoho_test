@@ -19,17 +19,21 @@
 @endif
 <div class="card mt-5 w-50" style="margin: 0 auto;">
   <div class="card-header">
-    Create Deal
+    Create Account
   </div>
   <div class="card-body">
-    <form action="{{route('deal-store')}}">
+    <form action="{{route('account-store')}}">
       <div class="mb-3">
-        <label class="form-label">Deal name</label>
-        <input type="text" class="form-control" name="Deal_Name">
+        <label class="form-label">Account  name</label>
+        <input type="text" class="form-control" name="Account_Name">
       </div>
       <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Deal stage</label>
-        <input type="text" class="form-control" name="Stage">
+        <label class="form-label">Account website</label>
+        <input type="text" class="form-control" name="Account_website">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Account phone</label>
+        <input type="text" class="form-control" name="Account_phone">
       </div>
       <div class="d-flex">
         <button type="submit" style="margin-right: 5px;" class="btn btn-primary">Submit</button>

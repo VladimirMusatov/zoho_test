@@ -20,4 +20,3 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/Access_Token',[ApiController::class, 'CreateToken']);
-Route::get('/GetDeals', [ApiController::class, 'GetDeals']);
