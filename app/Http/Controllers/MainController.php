@@ -40,12 +40,9 @@ class MainController extends Controller
                 }
 
                 if($request->Account_phone != null){
-                    $phone = $request->Account_phone;
-
-                    if(!preg_match("/^[0-9]{3}-[0-9]{4}-[0-9]{4}$/", $phone)){
-                        return back()->withErrors(['erorr' => 'Invalid Number Phone']);
-                    }
-
+                    $request->validate([
+                        'Account_phone' => ['phone'],
+                    ]);
                 }
 
             $array = array_merge($array, ['Account_Name' => $request->Account_Name]);
@@ -86,6 +83,13 @@ class MainController extends Controller
                 'Account_website' => ['url'],
             ]);
         }
+
+        if($request->Account_phone != null){
+            $request->validate([
+                'Account_phone' => ['phone'],
+            ]);
+        }
+
 
         $array = ['Account_Name' => $request->Account_Name, 'Phone' => $request->Account_phone, 'Website' => $request->Account_website];
 
