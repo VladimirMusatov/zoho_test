@@ -9,7 +9,7 @@ class MainController extends Controller
 {
     public function index()
     {
-        return view('home');
+        return redirect()->route('deal-form');
     }
 
     public function DealForm()
@@ -23,22 +23,49 @@ class MainController extends Controller
     {
 
         $request->validate([
-            'Deal_Name' => ['required', 'string'],
-            'Stage' => ['required', 'string'],
+            'Deal_Name' => ['required', 'string', 'max:255'],
+            'Stage' => ['required', 'string', 'max:255'],
         ]);
-
 
         $array = ['Deal_Name' => $request->Deal_Name , 'Stage' => $request->Stage];
 
-        $status = ApiController::CreateDeal($array);
+        if($request->has('create_account')){
 
-        if($status == 'success'){
+            $request->validate(['Account_Name' => ['required', 'string'],]);
 
-            return redirect()->back()->with('message','Deal created successfully');
+                if($request->Account_website != null){
+                    $request->validate([
+                        'Account_website' => ['url'],
+                    ]);
+                }
 
+                if($request->Account_phone != null){
+                    $phone = $request->Account_phone;
+
+                    if(!preg_match("/^[0-9]{3}-[0-9]{4}-[0-9]{4}$/", $phone)){
+                        return back()->withErrors(['erorr' => 'Invalid Number Phone']);
+                    }
+
+                }
+
+            $array = array_merge($array, ['Account_Name' => $request->Account_Name]);
+            
+            $account_data = ['Account_Name' => $request->Account_Name, 'Phone' => $request->Account_phone, 'Website' => $request->Account_website];
+
+            ApiController::CreateAccount($account_data);
         }
 
-        return redirect()->back()->with('message', "Something wrong");
+        $responce = ApiController::CreateDeal($array);
+
+        $status = $responce->data[0]->status;
+
+        $message = $responce->data[0]->message;
+
+        if($status != 'success'){
+            return redirect()->back()->with('message', $message);
+        }
+
+        return redirect()->back()->with('message', trans('result.success'));
 
     }
 
@@ -52,8 +79,13 @@ class MainController extends Controller
 
         $request->validate([
             'Account_Name' => ['required', 'string'],
-            'Account_website' => ['url'],
         ]);
+
+        if($request->Account_website != null){
+            $request->validate([
+                'Account_website' => ['url'],
+            ]);
+        }
 
         $array = ['Account_Name' => $request->Account_Name, 'Phone' => $request->Account_phone, 'Website' => $request->Account_website];
 
@@ -61,14 +93,13 @@ class MainController extends Controller
 
         $status = $responce->data[0]->status;
 
-        if($status == 'error'){
+        $message = $responce->data[0]->message;
 
-            $message = $responce->data[0]->message;
-
+        if($status != 'success'){
             return redirect()->back()->with('message', $message);
         }
 
-        return redirect()->back()->with('message', $status);
+        return redirect()->back()->with('message', trans('result.success'));
 
     }
 

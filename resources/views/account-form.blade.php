@@ -25,19 +25,18 @@
     <form action="{{route('account-store')}}">
       <div class="mb-3">
         <label class="form-label">Account  name</label>
-        <input type="text" class="form-control" name="Account_Name">
+        <input type="text" class="form-control" name="Account_Name" value="{{ old('Account_Name') }}">
       </div>
       <div class="mb-3">
         <label class="form-label">Account website</label>
-        <input type="text" class="form-control" name="Account_website">
+        <input type="url" class="form-control" name="Account_website" value="{{ old('Account_website') }}">
       </div>
       <div class="mb-3">
         <label class="form-label">Account phone</label>
-        <input type="text" class="form-control" name="Account_phone">
+        <input type="tel" class="form-control" name="Account_phone" value="{{ old('Account_phone') }}">
       </div>
       <div class="d-flex">
-        <button type="submit" style="margin-right: 5px;" class="btn btn-primary">Submit</button>
-        <a class="btn btn-warning" href="{{route('home')}}">Home</a>          
+        <button type="submit" style="margin-right: 5px;" class="btn btn-primary">Submit</button>        
       </div>
     </form>
   </div>

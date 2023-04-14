@@ -38,60 +38,6 @@ class ApiController extends Controller
         return $response->access_token;
     }
 
-    public static function AllModules(){
-
-        $curl = curl_init();
-
-        $access_token = ApiController::CreateToken();
-
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => 'https://www.zohoapis.eu/crm/v2/settings/modules',
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => '',
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => true,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => 'GET',
-          CURLOPT_HTTPHEADER => array(
-            'Authorization: Zoho-oauthtoken '.$access_token,
-          ),
-        ));
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-
-        return $response;
-    }
-
-    public static function GetDeals(){
-
-        $curl = curl_init();
-
-        $access_token = ApiController::CreateToken();
-
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => 'https://www.zohoapis.eu/crm/v2/Deals',
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => '',
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => true,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => 'GET',
-          CURLOPT_HTTPHEADER => array(
-            'Authorization: Zoho-oauthtoken '.$access_token,
-          ),
-        ));
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-
-        return $response;
-    }
-
     public static function CreateDeal($array){
 
         $access_token = ApiController::CreateToken();
@@ -123,9 +69,7 @@ class ApiController extends Controller
 
       $response = json_decode($response);
 
-      $status = $response->data[0]->status;
-
-      return $status;
+      return $response;
     }
 
     public static function CreateAccount($array){
