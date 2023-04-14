@@ -29,7 +29,7 @@
       </div>
       <div class="mb-3">
         <label class="form-label">Account website</label>
-        <input type="url" class="form-control" name="Account_website" value="{{ old('Account_website') }}">
+        <input type="text" class="form-control" name="Account_website" value="{{ old('Account_website') }}">
       </div>
       <div class="mb-3">
         <label class="form-label">Account phone</label>
