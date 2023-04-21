@@ -22,47 +22,55 @@ class MainController extends Controller
     public function DealStore(Request $request)
     {
 
-        $request->validate([
+        $this->validate($request, [
             'Deal_Name' => ['required', 'string', 'max:255'],
             'Stage' => ['required', 'string', 'max:255'],
+            'Account_Name' => ['required', 'string'],
+            'Account_website' => ['url', 'nullable'],
+            'Account_phone' => ['phone', 'nullable'],
         ]);
+
+        $account_data = ['Account_Name' => $request->Account_Name, 'Phone' => $request->Account_phone, 'Website' => $request->Account_website];
+
+        $create_account = ApiController::CreateAccount($account_data);
+
+        $status_account = $create_account->data[0]->status;
+
+        $message_account = $create_account->data[0]->message;
+
+
+        if($status_account != 'success'){
+            return response()->json([            
+                'success' => false,
+                'message' => $message_account,
+            ]);
+        }
+
 
         $array = ['Deal_Name' => $request->Deal_Name , 'Stage' => $request->Stage];
 
-        if($request->has('create_account')){
+        $array = array_merge($array, ['Account_Name' => $request->Account_Name]);
 
-            $request->validate(['Account_Name' => ['required', 'string'],]);
+        $response = ApiController::CreateDeal($array);
 
-                if($request->Account_website != null){
-                    $request->validate([
-                        'Account_website' => ['url'],
-                    ]);
-                }
+        $status = $response->data[0]->status;
 
-                if($request->Account_phone != null){
-                    $request->validate([
-                        'Account_phone' => ['phone'],
-                    ]);
-                }
-
-            $array = array_merge($array, ['Account_Name' => $request->Account_Name]);
-            
-            $account_data = ['Account_Name' => $request->Account_Name, 'Phone' => $request->Account_phone, 'Website' => $request->Account_website];
-
-            ApiController::CreateAccount($account_data);
-        }
-
-        $responce = ApiController::CreateDeal($array);
-
-        $status = $responce->data[0]->status;
-
-        $message = $responce->data[0]->message;
+        $message = $response->data[0]->message;
 
         if($status != 'success'){
-            return redirect()->back()->with('message', $message);
+            return response()->json([            
+                'success' => false,
+                'message' => $message,
+
+            ]);
         }
 
-        return redirect()->back()->with('message', trans('result.success'));
+
+        return response()->json([            
+            'success' => true,
+            'message' => trans('result.success'),
+
+        ]);
 
     }
 
@@ -74,36 +82,33 @@ class MainController extends Controller
     public function AccountStore(Request $request)
     {
 
-        $request->validate([
+        $this->validate($request, [
             'Account_Name' => ['required', 'string'],
+            'Account_website' => ['url', 'nullable'],
+            'Account_phone' => ['phone', 'nullable'],
         ]);
-
-        if($request->Account_website != null){
-            $request->validate([
-                'Account_website' => ['url'],
-            ]);
-        }
-
-        if($request->Account_phone != null){
-            $request->validate([
-                'Account_phone' => ['phone'],
-            ]);
-        }
-
 
         $array = ['Account_Name' => $request->Account_Name, 'Phone' => $request->Account_phone, 'Website' => $request->Account_website];
 
-        $responce = ApiController::CreateAccount($array);
+        $response = ApiController::CreateAccount($array);
 
-        $status = $responce->data[0]->status;
+        $status = $response->data[0]->status;
 
-        $message = $responce->data[0]->message;
+        $message = $response->data[0]->message;
 
         if($status != 'success'){
-            return redirect()->back()->with('message', $message);
+
+            return response()->json([
+                'success' => false,
+                'message' => $message,
+            ]);
+
         }
 
-        return redirect()->back()->with('message', trans('result.success'));
+        return response()->json([
+            'success' => true,
+            'message' => trans('result.success'),
+        ]);
 
     }
 

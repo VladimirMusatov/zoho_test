@@ -8,7 +8,7 @@ Route::get('/', function(){
 });
 
 Route::get('/deal-form', [MainController::class, 'DealForm'])->name('deal-form');
-Route::get('/deal-store',[MainController::class, 'DealStore'])->name('deal-store');
+Route::post('/deal-store',[MainController::class, 'DealStore'])->name('deal-store');
 
 Route::get('/accounts-form', [MainController::class, 'AccountForm'])->name('account-form');
-Route::get('/accounts-store', [MainController::class, 'AccountStore'])->name('account-store');
+Route::post('/accounts-store', [MainController::class, 'AccountStore'])->name('account-store');
